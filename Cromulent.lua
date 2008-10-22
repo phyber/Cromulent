@@ -13,11 +13,11 @@ local Cromulent, self = Cromulent, Cromulent
 }]]
 local L = LibStub("AceLocale-3.0"):GetLocale("Cromulent")
 local T = LibStub("LibTourist-3.0")
-local pairs = pairs
 local string_format = string.format
 local string_gsub = string.gsub
 local table_concat = table.concat
 local table_insert = table.insert
+local table_wipe = table.wipe
 local GetCurrentMapContinent = GetCurrentMapContinent
 local GetNumSkillLines = GetNumSkillLines
 local GetSkillLineInfo = GetSkillLineInfo
@@ -175,9 +175,7 @@ function Cromulent:WorldMapButton_OnUpdate()
 				-- OK, add all of the info from t[] into the zone info!
 				self.frame.text:SetText(table_concat(t, "\n"))
 				-- Reset t[], ready for the next run.
-				for k in pairs(t) do
-					t[k] = nil
-				end
+				table_wipe(t)
 			end
 		else 	-- If the zone has no instances
 			-- Just set the fishing level text and be on our way.
