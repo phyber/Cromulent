@@ -58,6 +58,7 @@ function Cromulent:WorldMapButton_OnUpdate()
 		return
 	end
 
+	-- Under Attack is used during events like the Naxxramas opening event.
 	local underAttack = false
 	local zone = WorldMapFrameAreaLabel:GetText()
 	if zone then
