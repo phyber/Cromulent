@@ -37,7 +37,7 @@ function Cromulent:OnEnable()
 	end
 	fishingSpell = GetSpellInfo(7620)
 	self.frame:Show()
-	self:SecureHook("WorldMapButton_OnUpdate", "WorldMapButton_OnUpdate")
+	self:SecureHookScript(WorldMapButton, "OnUpdate", "WorldMapButton_OnUpdate")
 end
 
 function Cromulent:OnDisable()
