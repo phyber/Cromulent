@@ -23,27 +23,6 @@ local GetNumSkillLines = GetNumSkillLines
 local GetSkillLineInfo = GetSkillLineInfo
 local GetSpellInfo = GetSpellInfo
 local fishingSpell -- Filled in in OnEnable
--- Levels taken from El's Extreme Anglin' (http://www.elsanglin.com/zone_base_fishing_skill.html)
--- since they aren't included in LibTourist-3.0 yet.
-local fishingLevels
-do
-	local BZ = LibStub("LibBabble-Zone-3.0"):GetLookupTable()
-	fishingLevels = {
-		[BZ["Borean Tundra"]]		= 380,
-		[BZ["Dragonblight"]]		= 380,
-		[BZ["Grizzly Hills"]]		= 380,
-		[BZ["Howling Fjord"]]		= 380,
-		[BZ["Zul'Drak"]]		= 380,
-		[BZ["Crystalsong Forest"]]	= 405,
-		[BZ["Dalaran"]]			= 430,
-		[BZ["Sholazar Basin"]]		= 430,
-		[BZ["Wintergrasp"]]		= 430,
-		[BZ["Icecrown"]]		= 455,
-		[BZ["The Storm Peaks"]]		= 455,
-		[BZ["Ulduar"]]			= 455,
-		[BZ["The Frozen Sea"]]		= 480,
-	}
-end
 
 function Cromulent:OnEnable()
 	if not self.frame then
@@ -117,13 +96,7 @@ function Cromulent:WorldMapButton_OnUpdate()
 			WorldMapFrameAreaDescription:SetTextColor(T:GetFactionColor(zone))
 		end
 		local low, high = T:GetLevel(zone)
-		-- If we're in Northrend (4), use local fishingLevels, otherwise ask LibTourist-3.0
-		local minFish
-		if GetCurrentMapContinent() == 4 then
-			minFish = fishingLevels[zone]
-		else
-			minFish = T:GetFishingLevel(zone)
-		end
+		local minFish = T:GetFishingLevel(zone)
 		local fishingSkillText
 		-- Fishing levels!
 		if minFish then
