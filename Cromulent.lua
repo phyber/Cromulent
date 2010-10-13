@@ -99,7 +99,7 @@ function Cromulent:WorldMapButton_OnUpdate()
 		if minFish then
 			-- Get fishing index
 			-- prof1, prof2, archaeology, fishing, cooking, firstaid
-			local _, _, _, fishingIdx, _, _, = GetProfessions()
+			local _, _, _, fishingIdx, _, _ = GetProfessions()
 			-- Find our current fishing rank
 			if fishingIdx then
 				local skillName, _, skillRank = GetProfessionInfo(fishingIdx)
