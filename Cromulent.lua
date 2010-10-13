@@ -21,7 +21,6 @@ local table_wipe = table.wipe
 local GetCurrentMapContinent = GetCurrentMapContinent
 local GetProfessionInfo = GetProfessionInfo
 local GetProfessions = GetProfessions
-local fishingIdx -- Filled in in OnEnable
 
 function Cromulent:OnEnable()
 	if not self.frame then
@@ -34,7 +33,6 @@ function Cromulent:OnEnable()
 		text:SetPoint("TOP", WorldMapFrameAreaDescription, "BOTTOM", 0, -5)
 		text:SetWidth(1024)
 	end
-	fishingIdx = select(4, GetProfessions())
 	self.frame:Show()
 	self:SecureHookScript(WorldMapButton, "OnUpdate", "WorldMapButton_OnUpdate")
 end
@@ -99,6 +97,9 @@ function Cromulent:WorldMapButton_OnUpdate()
 		local fishingSkillText
 		-- Fishing levels!
 		if minFish then
+			-- Get fishing index
+			-- prof1, prof2, archaeology, fishing, cooking, firstaid
+			local _, _, _, fishingIdx, _, _, = GetProfessions()
 			-- Find our current fishing rank
 			if fishingIdx then
 				local skillName, _, skillRank = GetProfessionInfo(fishingIdx)
