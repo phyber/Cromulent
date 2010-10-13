@@ -19,10 +19,9 @@ local table_concat = table.concat
 local table_insert = table.insert
 local table_wipe = table.wipe
 local GetCurrentMapContinent = GetCurrentMapContinent
-local GetNumSkillLines = GetNumSkillLines
-local GetSkillLineInfo = GetSkillLineInfo
-local GetSpellInfo = GetSpellInfo
-local fishingSpell -- Filled in in OnEnable
+local GetProfessionInfo = GetProfessionInfo
+local GetProfessions = GetProfessions
+local fishingIdx -- Filled in in OnEnable
 
 function Cromulent:OnEnable()
 	if not self.frame then
@@ -35,7 +34,7 @@ function Cromulent:OnEnable()
 		text:SetPoint("TOP", WorldMapFrameAreaDescription, "BOTTOM", 0, -5)
 		text:SetWidth(1024)
 	end
-	fishingSpell = GetSpellInfo(7620)
+	fishingIdx = select(4, GetProfessions())
 	self.frame:Show()
 	self:SecureHookScript(WorldMapButton, "OnUpdate", "WorldMapButton_OnUpdate")
 end
@@ -101,21 +100,18 @@ function Cromulent:WorldMapButton_OnUpdate()
 		-- Fishing levels!
 		if minFish then
 			-- Find our current fishing rank
-			for i = 1, GetNumSkillLines() do
-				local skillName, _, _, skillRank = GetSkillLineInfo(i)
-				if skillName == fishingSpell then
-					local r, g, b = 1, 1, 0
-					local r1, g1, b1 = 1, 0, 0
-					if minFish < skillRank then
-						r1, g1, b1 = 0, 1, 0
-					end
-					fishingSkillText = string_format("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d]|r", r * 255, g * 255, b * 255, fishingSpell, r1 * 255, g1 * 255, b1 * 255, minFish)
-					-- Break out of the loop after it has been found.
-					break
+			if fishingIdx then
+				local skillName, _, skillRank = GetProfessionInfo(fishingIdx)
+				local r, g, b = 1, 1, 0
+				local r1, g1, b1 = 1, 0, 0
+				if minFish < skillRank then
+					r1, g1, b1 = 0, 1, 0
 				end
-			end
-			if not fishingSkillText then
-				minFish = nil
+				fishingSkillText = string_format("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d]|r", r * 255, g * 255, b * 255, skillName, r1 * 255, g1 * 255, b1 * 255, minFish)
+				-- Break out of the loop after it has been found.
+				if not fishingSkillText then
+					minFish = nil
+				end
 			end
 		end
 		-- Set the difficulty colour of the zone, based on our current level.
