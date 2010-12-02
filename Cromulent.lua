@@ -30,7 +30,7 @@ function Cromulent:OnEnable()
 		local text = self.frame.text
 		local font, size = GameFontHighlightLarge:GetFont()
 		text:SetFont(font, size, "OUTLINE")
-		text:SetPoint("TOP", WorldMapFrameAreaDescription, "BOTTOM", 0, -5)
+		text:SetPoint("TOP", WorldMapFrameAreaDescription, "BOTTOM", 0, 64)
 		text:SetWidth(1024)
 	end
 	self.frame:Show()
