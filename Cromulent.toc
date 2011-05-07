@@ -1,4 +1,4 @@
-## Interface: 40000
+## Interface: 40100
 ## Title: Cromulent
 ## Notes: Shows ZoneInfo on the World Map in a perfectly cromulent fashion.
 ## Author: phyber
