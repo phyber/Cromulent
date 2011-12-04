@@ -92,7 +92,7 @@ function Cromulent:WorldMapButton_OnUpdate()
 			WorldMapFrameAreaLabel:SetTextColor(1, 1, 1)
 			WorldMapFrameAreaDescription:SetTextColor(T:GetFactionColor(zone))
 		end
-		local low, high = T:GetLevel(zone)
+		--local low, high = T:GetLevel(zone)
 		local minFish = T:GetFishingLevel(zone)
 		local fishingSkillText
 		-- Fishing levels!
@@ -116,25 +116,25 @@ function Cromulent:WorldMapButton_OnUpdate()
 			end
 		end
 		-- Set the difficulty colour of the zone, based on our current level.
-		if low > 0 and high > 0 then
-			local r, g, b = T:GetLevelColor(zone)
-			local levelText
-			if low == high then
-				levelText = string_format(" |cff%02x%02x%02x[%d]|r", r * 255, g * 255, b * 255, high)
-			else
-				levelText = string_format(" |cff%02x%02x%02x[%d-%d]|r", r * 255, g * 255, b * 255, low, high)
-			end
-			local groupSize = T:GetInstanceGroupSize(zone)
-			local sizeText = ""
-			if groupSize > 0 then
-				sizeText = " " .. string_format(L["%d-man"], groupSize)
-			end
-			if not underAttack then
-				WorldMapFrameAreaLabel:SetText(string_gsub(WorldMapFrameAreaLabel:GetText(), " |cff.+$", "") .. levelText .. sizeText)
-			else
-				WorldMapFrameAreaDescription:SetText(string_gsub(WorldMapFrameAreaDescription:GetText(), " |cff.+$", "") .. levelText .. sizeText)
-			end
-		end
+--		if low > 0 and high > 0 then
+--			local r, g, b = T:GetLevelColor(zone)
+--			local levelText
+--			if low == high then
+--				levelText = string_format(" |cff%02x%02x%02x[%d]|r", r * 255, g * 255, b * 255, high)
+--			else
+--				levelText = string_format(" |cff%02x%02x%02x[%d-%d]|r", r * 255, g * 255, b * 255, low, high)
+--			end
+--			local groupSize = T:GetInstanceGroupSize(zone)
+--			local sizeText = ""
+--			if groupSize > 0 then
+--				sizeText = " " .. string_format(L["%d-man"], groupSize)
+--			end
+--			if not underAttack then
+--				WorldMapFrameAreaLabel:SetText(string_gsub(WorldMapFrameAreaLabel:GetText(), " |cff.+$", "") .. levelText .. sizeText)
+--			else
+--				WorldMapFrameAreaDescription:SetText(string_gsub(WorldMapFrameAreaDescription:GetText(), " |cff.+$", "") .. levelText .. sizeText)
+--			end
+--		end
 		-- List the instances in the zone if it has any.
 		if T:DoesZoneHaveInstances(zone) then
 			if lastZone ~= zone then
