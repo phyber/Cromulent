@@ -16,7 +16,6 @@ local T = LibStub("LibTourist-3.0")
 local string_format = string.format
 local string_gsub = string.gsub
 local table_concat = table.concat
-local table_insert = table.insert
 local table_wipe = table.wipe
 local GetCurrentMapContinent = GetCurrentMapContinent
 local GetProfessionInfo = GetProfessionInfo
@@ -30,7 +29,7 @@ function Cromulent:OnEnable()
 		local text = self.frame.text
 		local font, size = GameFontHighlightLarge:GetFont()
 		text:SetFont(font, size, "OUTLINE")
-		text:SetPoint("TOP", WorldMapFrameAreaDescription, "BOTTOM", 0, 64)
+		text:SetPoint("TOP", WorldMapFrameAreaDescription, "BOTTOM", 0, -20)
 		text:SetWidth(1024)
 	end
 	self.frame:Show()
@@ -120,7 +119,7 @@ function Cromulent:WorldMapButton_OnUpdate()
 			if lastZone ~= zone then
 				-- Set lastZone so we don't keep grabbing this info in every Update.
 				lastZone = zone
-				table_insert(t, string_format("|cffffff00%s:|r", L["Instances"]))
+				t[#t + 1] = string_format("|cffffff00%s:|r", L["Instances"])
 				-- Iterate over the instance list and insert them into t[]
 				for instance in T:IterateZoneInstances(zone) do
 					local complex = T:GetComplex(instance)
@@ -134,21 +133,21 @@ function Cromulent:WorldMapButton_OnUpdate()
 					end
 					if low == high then
 						if groupSize > 0 then
-							table_insert(t, string_format("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d]|r " .. L["%d-man"], r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, high, groupSize))
+							t[#t + 1] = string_format("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d]|r " .. L["%d-man"], r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, high, groupSize)
 						else
-							table_insert(t, string_format("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d]|r", r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, high))
+							t[#t + 1] = string_format("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d]|r", r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, high)
 						end
 					else
 						if groupSize > 0 then
-							table_insert(t, string_format("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d-%d]|r " .. L["%d-man"], r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, low, high, groupSize))
+							t[#t + 1] = string_format("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d-%d]|r " .. L["%d-man"], r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, low, high, groupSize)
 						else
-							table_insert(t, string_format("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d-%d]|r", r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, low, high))
+							t[#t + 1] = string_format("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d-%d]|r", r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, low, high)
 						end
 					end
 				end
 				-- Add the fishing info to t[] if it exists.
 				if minFish and fishingSkillText then
-					table_insert(t, fishingSkillText)
+					t[#t + 1] = fishingSkillText
 				end
 				-- OK, add all of the info from t[] into the zone info!
 				self.frame.text:SetText(table_concat(t, "\n"))
