@@ -13,17 +13,18 @@ local Cromulent, self = Cromulent, Cromulent
 }]]
 local L = LibStub("AceLocale-3.0"):GetLocale("Cromulent")
 local T = LibStub("LibTourist-3.0")
-local string_format = string.format
-local string_gsub = string.gsub
 local table_concat = table.concat
 local table_wipe = table.wipe
 local GetCurrentMapContinent = GetCurrentMapContinent
 local GetProfessionInfo = GetProfessionInfo
 local GetProfessions = GetProfessions
+local COLOUR_RED = "ff0000"
+local COLOUR_GREEN = "00ff00"
+local COLOUR_YELLOW = "ffff00"
 
 function Cromulent:OnEnable()
 	if not self.frame then
-		self.frame = CreateFrame("Frame", "CromulentZoneInfo", WorldMapFrame)
+		self.frame = CreateFrame("Frame", nil, WorldMapFrame)
 
 		self.frame.text = WorldMapFrameAreaFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
 		local text = self.frame.text
@@ -58,10 +59,10 @@ function Cromulent:WorldMapButton_OnUpdate()
 	local underAttack = false
 	local zone = WorldMapFrameAreaLabel:GetText()
 	if zone then
-		zone = string_gsub(WorldMapFrameAreaLabel:GetText(), " |cff.+$", "")
+		zone = WorldMapFrameAreaLabel:GetText():gsub(" |cff.+$", "")
 		if WorldMapFrameAreaDescription:GetText() then
 			underAttack = true
-			zone = string_gsub(WorldMapFrameAreaDescription:GetText(), " |cff.+$", "")
+			zone = WorldMapFrameAreaDescription:GetText():gsub(" |cff.+$", "")
 		end
 	end
 	-- Set the text to white and hide the zone info if we're hovering over
@@ -102,16 +103,11 @@ function Cromulent:WorldMapButton_OnUpdate()
 			-- Find our current fishing rank
 			if fishingIdx then
 				local skillName, _, skillRank = GetProfessionInfo(fishingIdx)
-				local r, g, b = 1, 1, 0
-				local r1, g1, b1 = 1, 0, 0
+				local numColour = COLOUR_RED
 				if minFish < skillRank then
-					r1, g1, b1 = 0, 1, 0
+					numColour = COLOUR_GREEN
 				end
-				fishingSkillText = string_format("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d]|r", r * 255, g * 255, b * 255, skillName, r1 * 255, g1 * 255, b1 * 255, minFish)
-				-- Break out of the loop after it has been found.
-				if not fishingSkillText then
-					minFish = nil
-				end
+				fishingSkillText = ("|cff%s%s|r |cff%s[%d]|r"):format(COLOUR_YELLOW, skillName, numColour, minFish)
 			end
 		end
 		-- List the instances in the zone if it has any.
@@ -119,7 +115,7 @@ function Cromulent:WorldMapButton_OnUpdate()
 			if lastZone ~= zone then
 				-- Set lastZone so we don't keep grabbing this info in every Update.
 				lastZone = zone
-				t[#t + 1] = string_format("|cffffff00%s:|r", L["Instances"])
+				t[#t + 1] = ("|cffffff00%s:|r"):format(L["Instances"])
 				-- Iterate over the instance list and insert them into t[]
 				for instance in T:IterateZoneInstances(zone) do
 					local complex = T:GetComplex(instance)
@@ -133,15 +129,15 @@ function Cromulent:WorldMapButton_OnUpdate()
 					end
 					if low == high then
 						if groupSize > 0 then
-							t[#t + 1] = string_format("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d]|r " .. L["%d-man"], r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, high, groupSize)
+							t[#t + 1] = ("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d]|r " .. L["%d-man"]):format(r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, high, groupSize)
 						else
-							t[#t + 1] = string_format("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d]|r", r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, high)
+							t[#t + 1] = ("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d]|r"):format(r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, high)
 						end
 					else
 						if groupSize > 0 then
-							t[#t + 1] = string_format("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d-%d]|r " .. L["%d-man"], r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, low, high, groupSize)
+							t[#t + 1] = ("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d-%d]|r " .. L["%d-man"]):format(r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, low, high, groupSize)
 						else
-							t[#t + 1] = string_format("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d-%d]|r", r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, low, high)
+							t[#t + 1] = ("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d-%d]|r"):format(r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, low, high)
 						end
 					end
 				end
