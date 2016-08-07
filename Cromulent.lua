@@ -69,17 +69,18 @@ function Cromulent:OnDisable()
 end
 
 -- Set the offset appropriately based on pet level info being present.
-function Cromulent:InfoSetPoint(petLevels)
-	local y
+function Cromulent:InfoSetPoint()
+	local anchorFrame
+	local petLevels = WorldMapFrameAreaPetLevels:GetText()
+
 	if petLevels then
-		y = -32
+		anchorFrame = WorldMapFrameAreaPetLevels
 	else
-		y = 0
+		anchorFrame = WorldMapFrameAreaDescription
 	end
 
 	local text = self.frame.text
-	text:ClearAllPoints()
-	text:SetPoint("TOP", WorldMapFrameAreaDescription, "BOTTOM", 0, y)
+	text:SetPoint("TOP", anchorFrame, "BOTTOM", 0, 0)
 end
 
 local lastZone	-- So we don't keep processing zones in every Update
@@ -135,8 +136,7 @@ function Cromulent:WorldMapButton_OnUpdate()
 	if zone and (T:IsZoneOrInstance(zone) or T:DoesZoneHaveInstances(zone)) then
 		-- Set an appropriate anchor point based on pet level info
 		-- being displayed.
-		local petLevels = WorldMapFrameAreaPetLevels:GetText()
-		self:InfoSetPoint(petLevels)
+		self:InfoSetPoint()
 
 		-- For PvP servers, perhaps?  I haven't seen this do anything
 		-- on my home (PvE) server when a city was attacked.
