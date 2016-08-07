@@ -94,14 +94,19 @@ function Cromulent:WorldMapButton_OnUpdate()
 		end
 	end
 
-	-- Set the text to white and hide the zone info if we're hovering over
-	-- Kalimdor or Eastern Kingdoms on the old world continement map
-	if GetCurrentMapContinent() == WORLDMAP_AZEROTH_ID then
+	-- Set the text to white and hide the zone info if we're on the Azeroth
+	-- continent map.
+	local currentMapContinent = GetCurrentMapContinent()
+	if currentMapContinent == WORLDMAP_AZEROTH_ID then
 		if continentNames[zone] then
 			WorldMapFrameAreaLabel:SetTextColor(1, 1, 1)
 			self.frame.text:SetText("")
 			return
 		end
+	else
+		-- Get a proper lookup name for the zone based on the
+		-- continent.
+		zone = T:GetUniqueEnglishZoneNameForLookup(zone, currentMapContinent)
 	end
 
 	-- If we didn't find a zone, or the zone isn't an instance or a real
