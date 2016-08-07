@@ -17,10 +17,26 @@ local table_concat = table.concat
 local table_wipe = table.wipe
 local GetCurrentMapContinent = GetCurrentMapContinent
 local GetProfessionInfo = GetProfessionInfo
+local GetMapContinents = GetMapContinents
 local GetProfessions = GetProfessions
 local COLOUR_RED = "ff0000"
 local COLOUR_GREEN = "00ff00"
 local COLOUR_YELLOW = "ffff00"
+
+-- World map IDs. These are located in FrameXML/WorldMapFrame.lua
+local WORLDMAP_AZEROTH_ID = WORLDMAP_AZEROTH_ID
+local WORLDMAP_COSMIC_ID = WORLDMAP_COSMIC_ID
+local WORLDMAP_DRAENOR_ID = WORLDMAP_DRAENOR_ID
+local WORLDMAP_MAELSTROM_ID = WORLDMAP_MAELSTROM_ID
+local WORLDMAP_OUTLAND_ID = WORLDMAP_OUTLAND_ID
+
+-- IDs that don't have a constant in FrameXML/WorldMapFrame.lua
+local WORLDMAP_BROKENISLES_ID = 8
+local WORLDMAP_EASTERNKINGDOMS_ID = 2
+local WORLDMAP_KALIMDOR_ID = 1
+
+-- Store a table of continent names during OnEnable.
+local continentNames = nil
 
 function Cromulent:OnEnable()
 	if not self.frame then
@@ -32,6 +48,16 @@ function Cromulent:OnEnable()
 		text:SetFont(font, size, "OUTLINE")
 		text:SetPoint("TOP", WorldMapFrameAreaDescription, "BOTTOM", 0, -32)
 		text:SetWidth(1024)
+	end
+
+	if not continentNames then
+		local continents = { GetMapContinents() }
+		continentNames = {}
+
+		for i = 1, #continents, 2 do
+			name = continents[i + 1]
+			continentNames[name] = true
+		end
 	end
 
 	self.frame:Show()
@@ -70,9 +96,8 @@ function Cromulent:WorldMapButton_OnUpdate()
 
 	-- Set the text to white and hide the zone info if we're hovering over
 	-- Kalimdor or Eastern Kingdoms on the old world continement map
-	if GetCurrentMapContinent() == 0 then
-		local c1, c2 = GetMapContinents()
-		if zone == c1 or zone == c2 then
+	if GetCurrentMapContinent() == WORLDMAP_AZEROTH_ID then
+		if continentNames[zone] then
 			WorldMapFrameAreaLabel:SetTextColor(1, 1, 1)
 			self.frame.text:SetText("")
 			return
