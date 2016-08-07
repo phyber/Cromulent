@@ -30,9 +30,10 @@ function Cromulent:OnEnable()
 		local text = self.frame.text
 		local font, size = GameFontHighlightLarge:GetFont()
 		text:SetFont(font, size, "OUTLINE")
-		text:SetPoint("TOP", WorldMapFrameAreaDescription, "BOTTOM", 0, -20)
+		text:SetPoint("TOP", WorldMapFrameAreaDescription, "BOTTOM", 0, -32)
 		text:SetWidth(1024)
 	end
+
 	self.frame:Show()
 	self:SecureHookScript(WorldMapButton, "OnUpdate", "WorldMapButton_OnUpdate")
 end
@@ -49,6 +50,7 @@ function Cromulent:WorldMapButton_OnUpdate()
 	if not self.frame then
 		return
 	end
+
 	if not WorldMapDetailFrame:IsShown() or not WorldMapFrameAreaLabel:IsShown() then
 		self.frame.text:SetText("")
 		lastZone = nil
@@ -59,14 +61,15 @@ function Cromulent:WorldMapButton_OnUpdate()
 	local underAttack = false
 	local zone = WorldMapFrameAreaLabel:GetText()
 	if zone then
-		zone = WorldMapFrameAreaLabel:GetText():gsub(" |cff.+$", "")
+		zone = WorldMapFrameAreaLabel:GetText():gsub("|cff.+$", "")
 		if WorldMapFrameAreaDescription:GetText() then
 			underAttack = true
-			zone = WorldMapFrameAreaDescription:GetText():gsub(" |cff.+$", "")
+			zone = WorldMapFrameAreaDescription:GetText():gsub("|cff.+$", "")
 		end
 	end
+
 	-- Set the text to white and hide the zone info if we're hovering over
-	-- Kalimdor or Eastern Kingdoms on the old world continement map (I think)
+	-- Kalimdor or Eastern Kingdoms on the old world continement map
 	if GetCurrentMapContinent() == 0 then
 		local c1, c2 = GetMapContinents()
 		if zone == c1 or zone == c2 then
@@ -75,16 +78,20 @@ function Cromulent:WorldMapButton_OnUpdate()
 			return
 		end
 	end
-	-- If we didn't find a zone, or the zone isn't an instance or a real zone
-	-- steal the zone name from the WorldMapFrame
+
+	-- If we didn't find a zone, or the zone isn't an instance or a real
+	-- zone steal the zone name from the WorldMapFrame
 	if not zone or not T:IsZoneOrInstance(zone) then
 		zone = WorldMapFrame.areaName
 	end
+
 	WorldMapFrameAreaLabel:SetTextColor(1, 1, 1)
-	-- Now we can do some real work if the zone is a real zone and/or has instances
+
+	-- Now we can do some real work if the zone is a real zone and/or has
+	-- instances
 	if zone and (T:IsZoneOrInstance(zone) or T:DoesZoneHaveInstances(zone)) then
-		-- For PvP servers, perhaps?  I haven't seen this do anything on my home (PvE) server
-		-- when a city was attacked.
+		-- For PvP servers, perhaps?  I haven't seen this do anything
+		-- on my home (PvE) server when a city was attacked.
 		if not underAttack then
 			WorldMapFrameAreaLabel:SetTextColor(T:GetFactionColor(zone))
 			WorldMapFrameAreaDescription:SetTextColor(1, 1, 1)
@@ -92,14 +99,17 @@ function Cromulent:WorldMapButton_OnUpdate()
 			WorldMapFrameAreaLabel:SetTextColor(1, 1, 1)
 			WorldMapFrameAreaDescription:SetTextColor(T:GetFactionColor(zone))
 		end
+
 		--local low, high = T:GetLevel(zone)
 		local minFish = T:GetFishingLevel(zone)
 		local fishingSkillText
+
 		-- Fishing levels!
 		if minFish then
 			-- Get fishing index
 			-- prof1, prof2, archaeology, fishing, cooking, firstaid
 			local _, _, _, fishingIdx, _, _ = GetProfessions()
+
 			-- Find our current fishing rank
 			if fishingIdx then
 				local skillName, _, skillRank = GetProfessionInfo(fishingIdx)
@@ -110,12 +120,14 @@ function Cromulent:WorldMapButton_OnUpdate()
 				fishingSkillText = ("|cff%s%s|r |cff%s[%d]|r"):format(COLOUR_YELLOW, skillName, numColour, minFish)
 			end
 		end
+
 		-- List the instances in the zone if it has any.
 		if T:DoesZoneHaveInstances(zone) then
 			if lastZone ~= zone then
 				-- Set lastZone so we don't keep grabbing this info in every Update.
 				lastZone = zone
 				t[#t + 1] = ("|cffffff00%s:|r"):format(L["Instances"])
+
 				-- Iterate over the instance list and insert them into t[]
 				for instance in T:IterateZoneInstances(zone) do
 					local complex = T:GetComplex(instance)
@@ -124,9 +136,11 @@ function Cromulent:WorldMapButton_OnUpdate()
 					local r2, g2, b2 = T:GetLevelColor(instance)
 					local groupSize = T:GetInstanceGroupSize(instance)
 					local name = instance
+
 					if complex then
 						name = complex .. " - " .. instance
 					end
+
 					if low == high then
 						if groupSize > 0 then
 							t[#t + 1] = ("|cff%02x%02x%02x%s|r |cff%02x%02x%02x[%d]|r " .. L["%d-man"]):format(r1 * 255, g1 * 255, b1 * 255, name, r2 * 255, g2 * 255, b2 * 255, high, groupSize)
@@ -141,16 +155,19 @@ function Cromulent:WorldMapButton_OnUpdate()
 						end
 					end
 				end
+
 				-- Add the fishing info to t[] if it exists.
 				if minFish and fishingSkillText then
 					t[#t + 1] = fishingSkillText
 				end
+
 				-- OK, add all of the info from t[] into the zone info!
 				self.frame.text:SetText(table_concat(t, "\n"))
 				-- Reset t[], ready for the next run.
 				table_wipe(t)
 			end
-		else 	-- If the zone has no instances
+		else
+			-- If the zone has no instances
 			-- Just set the fishing level text and be on our way.
 			if minFish and fishingSkillText then
 				self.frame.text:SetText(fishingSkillText)
