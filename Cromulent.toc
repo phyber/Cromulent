@@ -4,8 +4,8 @@
 ## Author: phyber
 ## Version: @project-version@
 ## X-Credit: ckknight (Cartographer_ZoneInfo author which this is shamelessly ripped off from)
-## X-Embeds: Ace3, LibTourist-3.0
-## OptionalDeps: Ace3, LibTourist-3.0
+## X-Embeds: Ace3, LibTourist-3.0, HereBeDragons
+## OptionalDeps: Ace3, LibTourist-3.0, HereBeDragons
 
 #@no-lib-strip@
 embeds.xml
