@@ -6,6 +6,6 @@ externals:
     Libs/AceHook-3.0: https://repos.wowace.com/wow/ace3/trunk/AceHook-3.0
     Libs/AceLocale-3.0: https://repos.wowace.com/wow/ace3/trunk/AceLocale-3.0
     Libs/HereBeDragons:
-        url: https://repos.wowace.com/wow/herebedragons.git
+        url: https://repos.wowace.com/wow/herebedragons
         tag: 2.00-release
     Libs/LibTourist-3.0: https://repos.wowace.com/wow/libtourist-3-0/trunk
