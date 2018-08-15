@@ -2,6 +2,7 @@ package-as: Cromulent
 
 externals:
     Libs/LibStub: https://repos.wowace.com/wow/libstub/tags/1.0.2-70000
+    Libs/CallbackHandler-1.0: https://repos.wowace.com/wow/callbackhandler/trunk/CallbackHandler-1.0
     Libs/AceAddon-3.0: https://repos.wowace.com/wow/ace3/trunk/AceAddon-3.0
     Libs/AceHook-3.0: https://repos.wowace.com/wow/ace3/trunk/AceHook-3.0
     Libs/AceLocale-3.0: https://repos.wowace.com/wow/ace3/trunk/AceLocale-3.0
@@ -9,3 +10,6 @@ externals:
         url: https://repos.wowace.com/wow/herebedragons
         tag: 2.00-release
     Libs/LibTourist-3.0: https://repos.wowace.com/wow/libtourist-3-0/trunk
+
+ignore:
+    - Libs/LibStub/tests
