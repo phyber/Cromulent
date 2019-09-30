@@ -1,4 +1,4 @@
-## Interface: 80200
+## Interface: 80205-1
 ## Title: Cromulent
 ## Notes: Shows ZoneInfo on the World Map in a perfectly cromulent fashion.
 ## Author: phyber
